@@ -9,7 +9,7 @@ import com.capgemini.model.Passenger;
 public class BookingServiceImpl implements BookingService {
 
 	private static List<Passenger> pssgnList = new ArrayList<Passenger>();
-	private static String bus1[] = new String[20];//bus1-->is name of bus which is having 20seats
+	private static String bus1[] = new String[20];//bus1-->is name of bus which is having about 20seats
 	private static String bus2[] = new String[20];
 	private static String bus3[] = new String[20];
 	private static String bus4[] = new String[20];

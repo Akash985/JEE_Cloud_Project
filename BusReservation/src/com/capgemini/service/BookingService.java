@@ -1,7 +1,7 @@
 package com.capgemini.service;
 
 import com.capgemini.model.Passenger;
-
+//service layer
 public interface BookingService {
 	boolean signUp(Passenger pssgn);
 	Passenger login(String userName);
