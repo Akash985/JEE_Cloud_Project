@@ -86,6 +86,10 @@ Scanner input = new Scanner(System.in);
 				int age = input.nextInt();
 				System.out.println("Enter your Gender M/F:");
 				char gender = input.next().charAt(0);
+				while(gender!='M'&&gender!='F') {
+					System.out.println("!!!Enter either \"M\"->for male or \"F\"->for Female!!!");
+					gender = input.next().charAt(0);
+				}
 				System.out.println("Set your password:");
 				String password = input.next();
 				Passenger pssgnr1 = new Passenger(passangerName, userName, age, gender, password);
@@ -105,9 +109,11 @@ Scanner input = new Scanner(System.in);
 					System.out.println();
 					System.out.println("===========================================================================");
 				}
-				
+				System.out.println();
+				System.out.println("===========================================================================");
+
 				break;
-			case 3:
+			case 0:
 				flag =false;
 			
 			}		
