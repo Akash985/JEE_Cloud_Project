@@ -3,15 +3,15 @@ package com.capgemini.model;
 public class Passenger {
 	private String passangerName;
 	private String userName;
-	private int passengerId;
+	private static int passengerId=100;
 	private int age;
 	private char gender;
 	private String password;
-	public Passenger(String passangerName, String userName, int passengerId, int age, char gender, String password) {
+	public Passenger(String passangerName, String userName, int age, char gender, String password) {
 		super();
 		this.passangerName = passangerName;
 		this.userName = userName;
-		this.passengerId = passengerId;
+		passengerId = passengerId+1;
 		this.age = age;
 		this.gender = gender;
 		this.password = password;
@@ -32,7 +32,7 @@ public class Passenger {
 		return passengerId;
 	}
 	public void setPassengerId(int passengerId) {
-		this.passengerId = passengerId;
+		passengerId = passengerId;
 	}
 	public int getAge() {
 		return age;

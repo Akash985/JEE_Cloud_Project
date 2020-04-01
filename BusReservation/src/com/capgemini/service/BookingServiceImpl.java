@@ -37,13 +37,12 @@ public class BookingServiceImpl implements BookingService {
 	public boolean passwordVerification(Passenger pssgn, String password) {
 		if(password.equals(pssgn.getPassword())) {
 			System.out.println("Correct Password");
-			System.out.println("========================================================");
+			System.out.println("Go for booking!!!!!!!");
 			System.out.println();
 			return true;
 		}
 		else {
-			System.out.println("Incorrect Password,login again");
-			System.out.println("========================================================");
+			System.out.println("Incorrect Password,Enter the password again");
 			System.out.println();
 			return false;
 		}

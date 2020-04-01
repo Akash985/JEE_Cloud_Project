@@ -9,35 +9,111 @@ import com.capgemini.service.BookingServiceImpl;
 public class BookingBus {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Scanner input = new Scanner(System.in);
+Scanner input = new Scanner(System.in);
+		
 		BookingService service = new BookingServiceImpl();
-		Passenger pssgn1 = new Passenger("Atharva", "AtharvaP1997",101, 21,'M', "22222222");
-		Passenger pssgn2 = new Passenger("Arun", "Arun1997",102, 22,'M', "88888888");
-		Passenger pssgn3 = new Passenger("Akash", "AkashY1997",103, 23,'M', "11111111");
+		boolean flag =true;
+		
+		Passenger pssgn1 = new Passenger("Atharva", "AtharvaP1997", 21,'M', "22222222");
+		Passenger pssgn2 = new Passenger("Arun", "Arun1997", 22,'M', "88888888");
+		Passenger pssgn3 = new Passenger("Akash", "AkashY1997", 23,'M', "11111111");
 		service.signUp(pssgn1);
 		service.signUp(pssgn2);
 		service.signUp(pssgn3);
 	//This is data which will automatically filed in database whenever we execute our project
 	//so we don't need to signup again and again
-		 
-	//login page added
-		process:while(true) {
+	
 		
-		System.out.println("Enter your login Username:");
-		String userName = input.next();
-		Passenger pssgn = service.login(userName);
-		if(pssgn==null) {
-			System.out.println("!!!!!!!!!!invalid user name");
-			System.out.println("========================================================");
+		do {
+			System.out.println("*******************Bus Reservation*******************");
 			System.out.println();
-			continue process;
-		}
-		System.out.println("Enter the password: ");
-		String password = input.next();
-		boolean result = service.passwordVerification(pssgn, password);
+			System.out.println("Welcome to Bus Reservation");
+			System.out.println();
+			System.out.println("1. Login");
+			System.out.println("2. SignUp");
+			System.out.println("0. Exit Application");
+			System.out.println("Enter your choice: ");			
+			int choice = input.nextInt();//here also exception will come because if user enters input other than digit
+			System.out.println();
+			
+			switch(choice) {
 		
-		}
+			case 1:
+				Passenger pssgn;
+				boolean nextLoopflag;
+				String addword ="";
+				while(true) {
+					System.out.println("===========================================================================");
+					System.out.println("Enter your login Username "+addword+":");
+					String userName = input.next();
+					pssgn = service.login(userName);
+					if(pssgn==null) {
+						System.out.println("!!!!!!!!!!invalid user name");
+						System.out.println();
+						nextLoopflag = false;
+						addword ="again";
+						continue ;
+					}
+					else {
+						nextLoopflag = true;
+						System.out.println("Enter the password: ");
+						break;
+					}				
+				}
+				while(nextLoopflag) {
+					String password = input.next();
+					boolean result = service.passwordVerification(pssgn, password);
+					if(result==false) {
+						System.out.println("Enter the password again: ");
+						continue;
+					}
+					else {
+						nextLoopflag = false;
+						//flag=true;//used for debuging
+						break;
+					}
+				}	
+				
+				break;
+			case 2:
+				System.out.println("===========================================================================");
+				System.out.println("Enter your Full Name:");
+				input.nextLine(); // This line you have to add (It consumes the \n character which was not read by nextInt() earlier)
+				String passangerName = input.nextLine();				
+				System.out.println("Enter username:");
+				String userName = input.next();
+				System.out.println("Enter your age:");
+				int age = input.nextInt();
+				System.out.println("Enter your Gender M/F:");
+				char gender = input.next().charAt(0);
+				System.out.println("Set your password:");
+				String password = input.next();
+				Passenger pssgnr1 = new Passenger(passangerName, userName, age, gender, password);
+				System.out.println();
+				System.out.println("Your details are as follows:");
+				service.signUp(pssgnr1);
+				System.out.println(pssgnr1.toString());
+				System.out.println();
+				System.out.println("Enter \"back\" to go to login page ");
+				String goback = input.next();
+				while(!goback.equals("back")){
+					System.out.println("Inavlid input!!!");
+					System.out.println("###Enter \"back\" to go to login page ");
+					goback = input.next();//here we have to add exception becuase if 
+					//user enter like this"back k" the space will create inputmismatch exception 
+					//will arise
+					System.out.println();
+					System.out.println("===========================================================================");
+				}
+				
+				break;
+			case 3:
+				flag =false;
+			
+			}		
+			
+		} while (flag);	
+
 	}
 
 }
