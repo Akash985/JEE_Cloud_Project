@@ -14,16 +14,6 @@ public class BookingBus {
 		BookingService service = new BookingServiceImpl();
 		boolean flag =true;
 		
-		Passenger pssgn1 = new Passenger("Atharva", "AtharvaP1997", 21,'M', "22222222");
-		Passenger pssgn2 = new Passenger("Arun", "Arun1997", 22,'M', "88888888");
-		Passenger pssgn3 = new Passenger("Akash", "AkashY1997", 23,'M', "11111111");
-		service.signUp(pssgn1);
-		service.signUp(pssgn2);
-		service.signUp(pssgn3);
-	//This is data which will automatically filed in database whenever we execute our project
-	//so we don't need to signup again and again
-	
-		
 		do {
 			System.out.println("*******************Bus Reservation*******************");
 			System.out.println();
@@ -31,10 +21,11 @@ public class BookingBus {
 			System.out.println();
 			System.out.println("1. Login");
 			System.out.println("2. SignUp");
+			System.out.println("3. Admin work for debuging");
 			System.out.println("0. Exit Application");
 			System.out.println("Enter your choice: ");			
 			int choice = input.nextInt();//here also exception will come because if user enters input other than digit
-			while(choice!=1 && choice!=2 && choice!=0) {
+			while(choice!=1 && choice!=2 && choice!=3 && choice!=0) {
 				System.out.println("Inavlid input!!!----enter either\'1\' or\'2\' or\'0\'");
 				choice = input.nextInt();
 			}
@@ -73,9 +64,10 @@ public class BookingBus {
 					}
 					else {
 						nextLoopflag = false;
+						//flag=true;//used for debuging
 						break;
 					}
-				}	
+				}
 				
 				System.out.println("===========================================================================");
 				String goback;
@@ -100,7 +92,7 @@ public class BookingBus {
 					}
 					System.out.println();
 					busName = route[busChoice-1];
-//					/--->
+
 					label2:
 						while(true) {
 							int numberOfSeats =service.seatAvailability(route[busChoice-1]);
@@ -112,7 +104,7 @@ public class BookingBus {
 								System.out.println("Enter the seat number again which you want from the above available seats");
 								seatChoice = input.nextInt();
 							}
-							
+			
 							while((service.verfiySelectedSeatAvailable(route[busChoice-1], seatChoice))==false) {
 								System.out.println("Please enter the seat number again you want from the above available seats");
 								seatChoice = input.nextInt();
@@ -199,13 +191,20 @@ public class BookingBus {
 				System.out.println("===========================================================================");
 
 				break;
+			case 3:
+				System.out.println("To see passengers in bus enter the bus name ");
+				String busName1 = input.next();
+				service.listBusDisplay(busName1);
+				service.listPassgnDisplay();
+				break;
 			case 0:
 				flag =false;
 			
 			}		
 			
 		} while (flag);	
+		
 		input.close();
-	}
+		}
 
 }

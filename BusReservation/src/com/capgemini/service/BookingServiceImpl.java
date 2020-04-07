@@ -1,42 +1,19 @@
 package com.capgemini.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import com.capgemini.dao.BookingDao;
+import com.capgemini.dao.BookingDaoImpl;
 import com.capgemini.model.Passenger;
 
 public class BookingServiceImpl implements BookingService {
-	private static List<Passenger> pssgnList = new ArrayList<Passenger>();
-	private static HashMap<String, String[][]> busList = new HashMap<String, String[][]>();
-
-	private static String bus1[][] = new String[2][20];// bus1-->is name of bus which is having 20seats
-	private static String bus2[][] = new String[2][20];// 2 rows are created so we can use 1st row for goining on route1
-														// and while returning we will use 2nd row
-	private static String bus3[][] = new String[2][20];
-	private static String bus4[][] = new String[2][20];
-	static {
-		busList.put("Bus1", bus1);// static block--> code inside static block is executed only once: the first
-									// time you make an object of that class or the first time you access a static
-									// member of that class (even if you never make an object of that class).
-		busList.put("Bus2", bus2);
-		busList.put("Bus3", bus3);
-		busList.put("Bus4", bus4);
-		bus1[0][1] = "conductor1";// third seat not available
-		bus1[1][1] = "conductor2";
-		bus2[0][1] = "conductor3";// third seat not available
-		bus2[1][1] = "conductor4";
-		bus3[0][1] = "conductor5";// third seat not available
-		bus3[1][1] = "conductor6";
-		bus4[0][1] = "conductor7";// third seat not available
-		bus4[1][1] = "conductor8";
-
-	}
-
-	private static String route1[] = { "Bus1", "Bus2", "Bus3" };// from Mumbai to Panvel
-	private static String route2[] = { "Bus2", "Bus3" };// from Mumbai to Panvel to Lonavala
-	private static String route3[] = { "Bus3" };// from Mumbai to Panvel to Lonavala to Pune
+	private static Map<String, String[][]> busList1 = new HashMap<String, String[][]>();
+	private static BookingDao busDao = new BookingDaoImpl();
+	private static List<Passenger> pssgnList;
+	
 
 	private static boolean returnJourneyFlag = false;// we will use this in selection of bus
 	public void setReturnJourneyFlag(boolean returnJourneyFlag) {
@@ -45,12 +22,14 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public boolean signUp(Passenger pssgn) {
+		pssgnList= busDao.retrievePassgnList();
 		boolean result = pssgnList.add(pssgn);
 		return result;
 	}
 
 	@Override
 	public Passenger login(String userName) {
+		pssgnList= busDao.retrievePassgnList();
 		Iterator<Passenger> itr = pssgnList.iterator();
 		Passenger pssgnr = null;
 		while (itr.hasNext()) {
@@ -62,6 +41,8 @@ public class BookingServiceImpl implements BookingService {
 		}
 		return pssgnr;
 	}
+	
+	
 
 	@Override
 	public boolean passwordVerification(Passenger pssgn, String password) {
@@ -87,6 +68,7 @@ public class BookingServiceImpl implements BookingService {
 		boolean f;
 		if ((f = (mumbai.equals(source) && panvel.equals(destination)))
 				|| (mumbai.equals(destination) && panvel.equals(source))) {
+			String route1[] = BusDaoImpl.getRoute1();
 			if (f) {
 				for (int i = 0; i < route1.length; i++) {
 					System.out.println((i + 1) + ". " + route1[i]);
@@ -103,6 +85,7 @@ public class BookingServiceImpl implements BookingService {
 
 		} else if ((f = (((mumbai.equals(source) || panvel.equals(source))) && lonavala.equals(destination)))
 				|| ((mumbai.equals(destination) || panvel.equals(destination)) && lonavala.equals(source))) {
+			String route2[] = BusDaoImpl.getRoute2();
 			if (f) {
 				for (int i = 0; i < route2.length; i++) {
 					System.out.println((i + 1) + ". " + route2[i]);
@@ -121,6 +104,7 @@ public class BookingServiceImpl implements BookingService {
 				&& pune.equals(destination)))
 				|| ((mumbai.equals(destination) || panvel.equals(destination) || lonavala.equals(destination))
 						&& pune.equals(source))) {
+			String route3[] = BusDaoImpl.getRoute3();
 			if (f) {
 				for (int i = 0; i < route3.length; i++) {
 					System.out.println((i + 1) + ". " + route3[i]);
@@ -139,11 +123,12 @@ public class BookingServiceImpl implements BookingService {
 
 	}
 
+
 	@Override
 	public int seatAvailability(String busName) {
 		//return type is int--->because it returns number of seats in that bus 
-		
-		String bus[][] = busList.get(busName);
+		busList1 = busDao.retrieveBusList();
+		String bus[][] = busList1.get(busName);		
 		if (returnJourneyFlag == false) {
 			System.out.println("Seats available in " + busName);
 			for (int i = 0; i < bus[0].length; i++) {
@@ -173,7 +158,9 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public boolean verfiySelectedSeatAvailable(String busName, int seatNumber) {
-		String bus[][] = busList.get(busName);
+		busList1 = busDao.retrieveBusList();
+		
+		String bus[][] = busList1.get(busName);
 		if (returnJourneyFlag == false) {
 			if (bus[0][seatNumber - 1] == null) {
 				System.out.println("You have selected seat number " + seatNumber + " of " + busName);
@@ -196,11 +183,12 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public void bookTicket(String busName, int seatNumber, String pssgnName) {
-		// TODO Auto-generated method stub
-		String bus[][] = busList.get(busName);
+		
+		busList1 = busDao.retrieveBusList();
+		String bus[][] = busList1.get(busName);
 		if (returnJourneyFlag == false) {
 			bus[0][seatNumber-1] = pssgnName;
-			busList.replace(busName, bus);
+			busList1.replace(busName, bus);
 			System.out.println();
 			System.out.println("You have successfully booked the ticket!!!");
 			System.out.println("Your Ticket details are:");
@@ -209,7 +197,7 @@ public class BookingServiceImpl implements BookingService {
 			System.out.println("Seat Number"+seatNumber);
 		}else {
 			bus[1][seatNumber-1] = pssgnName;
-			busList.replace(busName, bus);
+			busList1.replace(busName, bus);
 			System.out.println();
 			System.out.println("You have successfully booked the ticket!!!");
 			System.out.println("Your Ticket details are:");
@@ -217,6 +205,31 @@ public class BookingServiceImpl implements BookingService {
 			System.out.println("Bus Name :"+busName+"R");
 			System.out.println("Seat Number :"+seatNumber);
 		}
+	}
+
+	@Override
+	public void listBusDisplay(String busName) {
+		busList1 = busDao.retrieveBusList();
+		String bus[][] = busList1.get(busName);
+		for (int i = 0; i < bus.length; i++) {
+			System.out.println("Bus journey code"+i);
+			for (int j = 0; j < bus[i].length; j++) {
+				System.out.println(j+" "+bus[i][j]);
+			}
+		}
+		
+	}
+
+	@Override
+	public void listPassgnDisplay() {
+		pssgnList = busDao.retrievePassgnList();
+		Iterator<Passenger> itr = pssgnList.iterator();
+		Passenger pssgnr = null;
+		while (itr.hasNext()) {
+			pssgnr = itr.next();
+			System.out.println(pssgnr.toString());
+		}
+		
 	}
 
 }

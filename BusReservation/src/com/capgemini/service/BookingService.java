@@ -11,4 +11,7 @@ public interface BookingService {
 	int seatAvailability(String busName);
 	boolean verfiySelectedSeatAvailable(String busName,int seatNumber);
 	void bookTicket(String busName,int seatNumber,String pssgnName);
+	//Just for debug
+	void listBusDisplay(String busName);
+	void listPassgnDisplay();
 }
