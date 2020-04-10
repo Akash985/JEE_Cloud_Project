@@ -68,7 +68,7 @@ public class BookingServiceImpl implements BookingService {
 		boolean f;
 		if ((f = (mumbai.equals(source) && panvel.equals(destination)))
 				|| (mumbai.equals(destination) && panvel.equals(source))) {
-			String route1[] = BusDaoImpl.getRoute1();
+			String route1[] = BookingDaoImpl.getRoute1();
 			if (f) {
 				for (int i = 0; i < route1.length; i++) {
 					System.out.println((i + 1) + ". " + route1[i]);
@@ -85,7 +85,7 @@ public class BookingServiceImpl implements BookingService {
 
 		} else if ((f = (((mumbai.equals(source) || panvel.equals(source))) && lonavala.equals(destination)))
 				|| ((mumbai.equals(destination) || panvel.equals(destination)) && lonavala.equals(source))) {
-			String route2[] = BusDaoImpl.getRoute2();
+			String route2[] = BookingDaoImpl.getRoute2();
 			if (f) {
 				for (int i = 0; i < route2.length; i++) {
 					System.out.println((i + 1) + ". " + route2[i]);
@@ -104,7 +104,7 @@ public class BookingServiceImpl implements BookingService {
 				&& pune.equals(destination)))
 				|| ((mumbai.equals(destination) || panvel.equals(destination) || lonavala.equals(destination))
 						&& pune.equals(source))) {
-			String route3[] = BusDaoImpl.getRoute3();
+			String route3[] = BookingDaoImpl.getRoute3();
 			if (f) {
 				for (int i = 0; i < route3.length; i++) {
 					System.out.println((i + 1) + ". " + route3[i]);
