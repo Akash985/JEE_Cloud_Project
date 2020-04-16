@@ -11,6 +11,30 @@ public class Passenger {
 		this.gender = gender;
 		this.age = age;
 	}
+
+	public String getPassengerName() {
+		return PassengerName;
+	}
+
+	public void setPassengerName(String passengerName) {
+		PassengerName = passengerName;
+	}
+
+	public char getGender() {
+		return gender;
+	}
+
+	public void setGender(char gender) {
+		this.gender = gender;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
 	
 	
 
