@@ -51,26 +51,41 @@ public class BusDaoImpl implements BusDao {
 		busListAccToTimeTable.put("Tue", tueBusList);
 		
 		//for Wednesday
+		mumToPune = new Bus("Mumbai-Pune", "MH04NX1356", "Mumbai", "Pune", boardingStops1, dropingStops1, 20,"Dan Bravo","11:30 AM");
+		panvelToSatara = new Bus("Panvel-Satara", "MH05NX1487", "Panvel", "Satara", boardingStops2, dropingStops2, 20, "Bhuvan Signh","1:30 PM");
+
 		wedBusList.add(mumToPune);
 		wedBusList.add(panvelToSatara);		
 		busListAccToTimeTable.put("Wed", wedBusList);
 		
 		//for Thursday
+		panvelToPune = new Bus("Panvel-Pune", "MH05TX1156", "Panvel", "Pune", boardingStops3, dropingStops3, 20,"Kylo ren","1:00 PM");
+		panvelToKolhapur = new Bus("Panvel-Kolhapur", "MH0aNX5662", "Panvel", "Kolhapur", boardingStops4, dropingStops4, 20, "Han Solo","3:30 PM");
+
 		thuBusList.add(panvelToPune);
 		thuBusList.add(panvelToKolhapur);		
 		busListAccToTimeTable.put("Thu", thuBusList);
 		
 		//for Friday
+		mumToPune = new Bus("Mumbai-Pune", "MH04NX1356", "Mumbai", "Pune", boardingStops1, dropingStops1, 20,"Dan Bravo","11:30 AM");
+		panvelToSatara = new Bus("Panvel-Satara", "MH05NX1487", "Panvel", "Satara", boardingStops2, dropingStops2, 20, "Bhuvan Signh","1:30 PM");
+
 		friBusList.add(mumToPune);
 		friBusList.add(panvelToSatara);		
 		busListAccToTimeTable.put("Fri", friBusList);
 		
 		//for Saturday
+		panvelToPune = new Bus("Panvel-Pune", "MH05TX1156", "Panvel", "Pune", boardingStops3, dropingStops3, 20,"Kylo ren","1:00 PM");
+		panvelToKolhapur = new Bus("Panvel-Kolhapur", "MH0aNX5662", "Panvel", "Kolhapur", boardingStops4, dropingStops4, 20, "Han Solo","3:30 PM");
+
 		satBusList.add(panvelToPune);
 		satBusList.add(panvelToKolhapur);		
 		busListAccToTimeTable.put("Sat", satBusList);
 		
 		//for Sunday
+		mumToPune = new Bus("Mumbai-Pune", "MH04NX1356", "Mumbai", "Pune", boardingStops1, dropingStops1, 20,"Dan Bravo","11:30 AM");
+		panvelToSatara = new Bus("Panvel-Satara", "MH05NX1487", "Panvel", "Satara", boardingStops2, dropingStops2, 20, "Bhuvan Signh","1:30 PM");
+
 		sunBusList.add(mumToPune);
 		sunBusList.add(panvelToSatara);		
 		busListAccToTimeTable.put("Sun", sunBusList);
