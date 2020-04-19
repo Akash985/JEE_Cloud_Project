@@ -1,5 +1,8 @@
 package com.capgemini.dao;
 
-public interface AdminDao {
+import com.capgemini.exception.UserNotFoundException;
+import com.capgemini.model.Admin;
 
+public interface AdminDao {
+  Admin getAdminbyUserName(String adminUserName) throws UserNotFoundException;
 }
