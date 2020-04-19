@@ -5,7 +5,7 @@ public class User {
 	private String userFullName;
 	private String UserName;
 	private String userPassword;
-	private int userId = 1001;
+	private static int userId = 1001;
 	private char gender;
 	private int age;
 	private long phoneNumber;
