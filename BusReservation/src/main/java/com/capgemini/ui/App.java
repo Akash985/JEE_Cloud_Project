@@ -1,6 +1,5 @@
 package com.capgemini.ui;
 
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,6 +12,7 @@ import com.capgemini.exception.BookingFailedException;
 import com.capgemini.exception.BusNotAvailableException;
 import com.capgemini.exception.InvalidUserPasswordException;
 import com.capgemini.exception.PhoneNumberExistsException;
+import com.capgemini.exception.SeatAlreadyOccupiedException;
 import com.capgemini.exception.SeatNotAvailableException;
 import com.capgemini.exception.SourceAndDestinationAreEqualException;
 import com.capgemini.exception.UserNameExistsException;
@@ -148,7 +148,7 @@ public class App {
 					System.out.println("Select the choice in which you want to travel from above list");
 					int busChoice = input.nextInt(); // ##here exception
 					selectedBus = availBusList.get(busChoice - 1);
-
+					
 					
 					// show seat availability in that bus
 					label2: while (true) {
@@ -165,6 +165,17 @@ public class App {
 						// here user selects the seatNo
 						System.out.println("Enter the seat you want :");
 						int selectedSeatNo = input.nextInt();
+						
+						//validateSeatNo of that bus
+						SeatArrangement seatArrgn = new SeatArrangementImpl();
+						try {
+							seatArrgn.validateSeat(selectedBus, selectedSeatNo);
+						} catch (SeatAlreadyOccupiedException e) {
+							System.out.println();
+							System.out.println(e.getMessage());
+							System.out.println("Enter seats from below available seats");
+							continue label2;
+						}
 
 						// ask to enter passenger details
 						System.out.println("Enter the passenger details :");
@@ -177,8 +188,8 @@ public class App {
 						age = input.nextInt();
 
 						Passenger pssgn = new Passenger(pssgnName, gender, age);
-
-						System.out.println("Your ticket details are:");
+						
+						System.out.println("\nYour ticket details are:");
 						BookTicket bkticket = new BookTicketImpl();
 						System.out
 								.println(bkticket.showTicket(source, destination, selectedBus, pssgn, selectedSeatNo,dateOfTravel));
@@ -187,26 +198,27 @@ public class App {
 						char choice2 = input.next().charAt(0);//############################################
 						if (choice2 == 'Y') {
 							try {
+								System.out.println();
 								System.out.println(
 										bkticket.bookTicket(source, destination, selectedBus, pssgn, selectedSeatNo, dateOfTravel));
 							} catch (BookingFailedException e) {
 								System.out.println(e.getMessage());
 								System.out.println("Try again...");
 								continue label2;
-							}
+							} 
 						} else {
-							System.out.println("you canceled to book");
+							System.out.println("You canceled to book! \n");
 							continue label1;
 						}
 
 						System.out.println();
 						System.out.println("Do you want to book ticket again? \n Enter--> (Y->yes/N->No)");
 						char choice3 = input.next().charAt(0);//############################################
-						if (choice2 == 'Y') {
+						if (choice3 == 'Y') {
 							continue label2;
 						} else {
 							System.out.println("Do you want to goto home page or logout enter your choice ");
-							System.out.println("1. Home page \n 2. Logout");
+							System.out.println("1. Home page \n2. Logout");
 							int choice4;
 							
 							label3: while (true) {
