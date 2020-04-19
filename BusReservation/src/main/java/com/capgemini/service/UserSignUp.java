@@ -1,13 +1,13 @@
 package com.capgemini.service;
 
+import com.capgemini.exception.PhoneNumberExistsException;
+import com.capgemini.exception.UserNameExistsException;
 import com.capgemini.model.User;
 
 public interface UserSignUp {
 	
 	
-	public boolean signUp(User user);
+	public boolean signUp(User user) throws UserNameExistsException, PhoneNumberExistsException;
 	
-//	pssgnList= busDao.retrievePassgnList();
-//	boolean result = pssgnList.add(pssgn);
-//	return result;
+
 }

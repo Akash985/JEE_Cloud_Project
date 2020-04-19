@@ -10,16 +10,12 @@ public class UserSignUpImpl implements UserSignUp {
 
 	private static UserDao userDao = new UserDaoImpl();
 	@Override
-	public boolean signUp(User user) {		
+	public boolean signUp(User user) throws UserNameExistsException, PhoneNumberExistsException {		
 		
 		boolean flag = false;
 		boolean result = false;
-		try {
-			flag = userDao.validateDetails(user);//if flag is false user exists and (if flag is true user does not exist and 
+		flag = userDao.validateDetails(user);//if flag is false user exists and (if flag is true user does not exist and 
 												//we can add user)
-		} catch (UserNameExistsException | PhoneNumberExistsException e) {
-			System.out.println(e.getMessage());
-		}//here exception
 		
 		if(flag) {
 			result = userDao.createNewUser(user);
