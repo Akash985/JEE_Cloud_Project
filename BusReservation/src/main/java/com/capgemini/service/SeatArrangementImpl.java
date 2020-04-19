@@ -29,14 +29,11 @@ public class SeatArrangementImpl implements SeatArrangement{
 	}
 
 	@Override
-	public boolean bookSeat(Bus bus, int seatNo, String pssgnName) throws SeatAlreadyOccupiedException {
+	public boolean bookSeat(Bus bus, int seatNo, String pssgnName)  {
 		String tempSeats[] = bus.getSeatArrangement();
-		boolean result = validateSeat(bus, seatNo);
-		if (result == true) {
-			tempSeats[seatNo-1] = pssgnName;
-			return true;
-		}
-		return false;
+		tempSeats[seatNo-1] = pssgnName;
+		return true;
+		
 	}
 
 	@Override

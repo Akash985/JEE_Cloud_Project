@@ -6,7 +6,7 @@ import com.capgemini.model.Bus;
 
 public interface SeatArrangement {
 	StringBuffer seatAvailability(Bus bus) throws SeatNotAvailableException ;
-	boolean bookSeat(Bus bus, int seatNo, String pssgnName) throws SeatAlreadyOccupiedException;
+	boolean bookSeat(Bus bus, int seatNo, String pssgnName);
 	boolean validateSeat(Bus bus, int seatNo) throws SeatAlreadyOccupiedException;
 
 }
