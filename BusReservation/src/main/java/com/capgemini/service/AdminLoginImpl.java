@@ -2,6 +2,7 @@ package com.capgemini.service;
 
 import com.capgemini.dao.AdminDao;
 import com.capgemini.dao.AdminDaoImpl;
+import com.capgemini.exception.InvalidUserPasswordException;
 import com.capgemini.exception.UserNotFoundException;
 import com.capgemini.model.Admin;
 
@@ -9,7 +10,7 @@ public class AdminLoginImpl implements AdminLogin{
 	private static AdminDao adminDao = new AdminDaoImpl();
 
 	@Override
-	public Admin validateadminUserName(String adminUserName) {
+	public Admin validateadminUserName(String adminUserName) throws UserNotFoundException {
 		Admin admin=null;
 		try {
 			admin=adminDao.getAdminbyUserName(adminUserName);
@@ -21,12 +22,11 @@ public class AdminLoginImpl implements AdminLogin{
 	}
 
 	@Override
-	public boolean passwordVerification(Admin admin, String adminPassword) {
+	public boolean passwordVerification(Admin admin, String adminPassword) throws InvalidUserPasswordException {
 		if(adminPassword.equals(admin.getAdminPassword())) {
 			return true;
 		}else {
-			//here you have to create InvalidUSerException in exception package and handle in this function
-			return false;
+			throw new InvalidUserPasswordException();
 		}
 	}
 
