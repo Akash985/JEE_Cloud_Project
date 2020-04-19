@@ -11,9 +11,10 @@ public class Bus {
 	private int numberOfSeats;
 	private String seatArrangement[];
 	private String conductorName;
+	private String departTime;
 
 	public Bus(String busName, String busNumber, String startStop, String endStop, String[] boardingStops,
-			String[] droppingStops, int numberOfSeats, String conductorName) {
+			String[] droppingStops, int numberOfSeats, String conductorName, String deparTtime) {
 		this.busName = busName;
 		this.busNumber = busNumber;
 		this.startStop = startStop;
@@ -24,7 +25,8 @@ public class Bus {
 		seatArrangement = new String[numberOfSeats];
 		this.conductorName = conductorName;
 		seatArrangement[1] ="Conductor-"+conductorName;
-		
+		this.departTime =deparTtime;
+			
 	}
 
 	public String getBusName() {
@@ -99,5 +101,13 @@ public class Bus {
 		this.conductorName = conductorName;
 	}
 	
+	public String getDepartTime() {
+		return departTime;
+	}
+
+
+	public void setDepartTime(String departTime) {
+		this.departTime = departTime;
+	}
 		
 }
