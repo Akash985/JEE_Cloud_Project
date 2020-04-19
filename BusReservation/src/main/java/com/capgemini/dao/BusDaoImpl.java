@@ -144,8 +144,6 @@ public class BusDaoImpl implements BusDao {
 		return sortedBusList;
 	}
 
-	
-
 
 
 }

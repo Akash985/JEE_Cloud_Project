@@ -5,11 +5,7 @@ import java.util.List;
 import com.capgemini.exception.BusNotAvailableException;
 import com.capgemini.model.Bus;
 
-public interface BusDao {
-	
+public interface BusDao {	
 	List<Bus> findBus(String source, String destination, String day) throws BusNotAvailableException;	
 	boolean createBus(Bus bus,String day) ;
-	
-
-
 }
