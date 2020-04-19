@@ -27,14 +27,14 @@ public class FareDaoImpl implements FareDao{
 	
 	@Override
 	public double calculateFare(String source, String destination, Bus bus, Passenger pssgn) {
-		String sourceToDestination = source+"-"+destination;
+		String sourceToDestination = source.toLowerCase()+"-"+destination.toLowerCase();
 		double distance = fareList.get(sourceToDestination);//in km
 		
-		/*
-		 * Rs1.5 for 1km for normal bus---> right now we are using this one for every bus
-		 * but we can extend this by categorizing bus into ac, nonac, semi luxury,sleeper,nonsleeper,superfast(here we will use Bus object bus)
-		 * and accordingly we decide fare/km in rs
-		 * */
+			/*
+			 * Rs1.5 for 1km for normal bus---> right now we are using this one for every bus
+			 * but we can extend this by categorizing bus into ac, nonac, semi luxury,sleeper,nonsleeper,superfast(here we will use Bus object bus)
+			 * and accordingly we decide fare/km in rs
+			 * */
 		double fare = 1.5*distance;
 		
 		if(pssgn.getAge()>11 && pssgn.getAge()<60) {
