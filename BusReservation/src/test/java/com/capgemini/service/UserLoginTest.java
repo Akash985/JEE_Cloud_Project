@@ -28,7 +28,6 @@ public class UserLoginTest {
 	
 	@Test
 	public void testValidateUserNameForUserNameExist() {
-//		User user1 = new User("Atharva", "AtharvaP1997", "22222222", 'M', 21, 7856124389L);
 		UserLogin userLogin= new UserLoginImpl();
 		User user2 = null;
 		try {
@@ -48,7 +47,6 @@ public class UserLoginTest {
 	
 	@Test
 	public void testPasswordVerificationPassed() {
-//		User user1 = new User("Atharva", "AtharvaP1997", "22222222", 'M', 21, 7856124389L);
 		UserLogin userLogin= new UserLoginImpl();
 		try {
 			assertTrue(userLogin.passwordVerification(user1, "22222222"));
@@ -59,7 +57,6 @@ public class UserLoginTest {
 	
 	@Test
 	public void testPasswordVerificationFailed() {
-//		User user1 = new User("Atharva", "AtharvaP1997", "22222222", 'M', 21, 7856124389L);
 		UserLogin userLogin= new UserLoginImpl();
 		try {
 			assertFalse(userLogin.passwordVerification(user1, "11111111"));
@@ -71,7 +68,6 @@ public class UserLoginTest {
 	
 	@Test(expected = InvalidUserPasswordException.class)
 	public void testPasswordVerificationInvalidUserPassworException() throws InvalidUserPasswordException {
-//		sUser user1 = new User("Atharva", "AtharvaP1997", "22222222", 'M', 21, 7856124389L);
 		UserLogin userLogin= new UserLoginImpl();
 		assertFalse(userLogin.passwordVerification(user1, "11111111"));
 	}
