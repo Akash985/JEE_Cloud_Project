@@ -11,12 +11,12 @@ import com.capgemini.model.Bus;
 public class SearchBusImpl implements SearchBus {
 	BusDao busDao = new BusDaoImpl();
 	@Override
-	public List<Bus> showAvailableBuses(String source, String destination, String day) throws BusNotAvailableException, SourceAndDestinationAreEqualException {
+	public List<Bus> showAvailableBuses(String source, String destination, String date) throws BusNotAvailableException, SourceAndDestinationAreEqualException {
 		if(source.equalsIgnoreCase(destination)) {
 			throw new SourceAndDestinationAreEqualException();
 			
 		}else {
-			return busDao.findBus(source, destination, day);			
+			return busDao.findBus(source, destination, date);			
 		}
 		
 		

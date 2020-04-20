@@ -7,5 +7,5 @@ import com.capgemini.exception.SourceAndDestinationAreEqualException;
 import com.capgemini.model.Bus;
 
 public interface SearchBus {
-	List<Bus> showAvailableBuses(String source, String destination, String day) throws BusNotAvailableException, SourceAndDestinationAreEqualException;
+	List<Bus> showAvailableBuses(String source, String destination, String date) throws BusNotAvailableException, SourceAndDestinationAreEqualException;
 }
