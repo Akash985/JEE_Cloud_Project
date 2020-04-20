@@ -1,9 +1,7 @@
 package com.capgemini.ui;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -15,16 +13,18 @@ import com.capgemini.exception.PhoneNumberExistsException;
 import com.capgemini.exception.SeatAlreadyOccupiedException;
 import com.capgemini.exception.SeatNotAvailableException;
 import com.capgemini.exception.SourceAndDestinationAreEqualException;
+import com.capgemini.exception.UserDateEqualCurrDateException;
+import com.capgemini.exception.UserDateExceedLimitException;
+import com.capgemini.exception.UserDateFallBehindCurrDateException;
 import com.capgemini.exception.UserNameExistsException;
 import com.capgemini.exception.UserNotFoundException;
-import com.capgemini.model.Admin;
 import com.capgemini.model.Bus;
 import com.capgemini.model.Passenger;
 import com.capgemini.model.User;
-import com.capgemini.service.AdminLogin;
-import com.capgemini.service.AdminLoginImpl;
 import com.capgemini.service.BookTicket;
 import com.capgemini.service.BookTicketImpl;
+import com.capgemini.service.DateOperation;
+import com.capgemini.service.DateOperationImpl;
 import com.capgemini.service.SearchBus;
 import com.capgemini.service.SearchBusImpl;
 import com.capgemini.service.SeatArrangement;
@@ -56,7 +56,6 @@ public class App {
 			while (true) {
 				try {
 					choice = input.nextInt();
-
 					if (choice <= 0 || choice > 3) {
 						System.out.println("!!!You have to choose a choice from 0 to 3");
 						continue;
@@ -94,6 +93,7 @@ public class App {
 						continue;
 					}
 				}
+
 				while (nextLoopflag) {
 					String password = input.next();
 					boolean result;
@@ -117,30 +117,39 @@ public class App {
 				String dateOfTravel;
 				String day;
 				Bus selectedBus;
-				
-				
+
+				DateOperation dtoperation = new DateOperationImpl();
+				System.out.println("Booking is open upto : " + dtoperation.offsetDate());
 				// ask for source to destination
 				label1: while (true) {
 					System.out.println("Enter your Source");
 					source = input.next();
 					System.out.println("Enter your destination");
 					destination = input.next();
-					System.out.println("Enter the date of travelin dd/m//yyyy");
-					dateOfTravel = input.next();
+					while (true) {
+						System.out.println("Enter the date of travel in dd/m//yyyy");
+						dateOfTravel = input.next();
+						try {
+							dateOfTravel = dtoperation.validateDate(dateOfTravel);
+							break;
+						} catch (ParseException | UserDateExceedLimitException
+								| UserDateFallBehindCurrDateException | UserDateEqualCurrDateException e) {
+							System.out.println(e.getMessage());
+							continue;
+						}
+
+					}
+
 					SearchBus searchBus = new SearchBusImpl();
 					try {
-						day = findDayOnThisDate(dateOfTravel);
-						availBusList = searchBus.showAvailableBuses(source, destination, day);
+						availBusList = searchBus.showAvailableBuses(source, destination, dateOfTravel);
 					} catch (SourceAndDestinationAreEqualException e) {
 						System.out.println(e.getMessage());
 						continue label1;
 					} catch (BusNotAvailableException e) {
 						System.out.println(e.getMessage());
 						continue label1;
-					} catch (ParseException e) {
-						System.out.println("Date entered is not in a valid format!!!");
-						continue label1;
-					} 
+					}
 
 					System.out.println("Buses available for this route are as follows :");
 					for (int i = 0; i < availBusList.size(); i++) {
@@ -151,8 +160,7 @@ public class App {
 					System.out.println("Select the choice in which you want to travel from above list");
 					int busChoice = input.nextInt(); // ##here exception
 					selectedBus = availBusList.get(busChoice - 1);
-					
-					
+
 					// show seat availability in that bus
 					label2: while (true) {
 						System.out.println("Seat available in " + selectedBus.getBusName() + " are as follows :");
@@ -168,8 +176,8 @@ public class App {
 						// here user selects the seatNo
 						System.out.println("Enter the seat you want :");
 						int selectedSeatNo = input.nextInt();
-						
-						//validateSeatNo of that bus
+
+						// validateSeatNo of that bus
 						SeatArrangement seatArrgn = new SeatArrangementImpl();
 						try {
 							seatArrgn.validateSeat(selectedBus, selectedSeatNo);
@@ -191,39 +199,38 @@ public class App {
 						age = input.nextInt();
 
 						Passenger pssgn = new Passenger(pssgnName, gender, age);
-						
-						System.out.println("\nYour ticket details are:");
+
+						System.out.println("Your ticket details are:");
 						BookTicket bkticket = new BookTicketImpl();
-						System.out
-								.println(bkticket.showTicket(source, destination, selectedBus, pssgn, selectedSeatNo,dateOfTravel));
+						System.out.println("\n"+bkticket.showTicket(source, destination, selectedBus, pssgn, selectedSeatNo,
+								dateOfTravel));
 
 						System.out.println("Do you want to confirm ticket (Y->yes/N->No)");
-						char choice2 = input.next().charAt(0);//############################################
+						char choice2 = input.next().charAt(0);
 						if (choice2 == 'Y') {
 							try {
-								System.out.println();
-								System.out.println(
-										bkticket.bookTicket(source, destination, selectedBus, pssgn, selectedSeatNo, dateOfTravel));
+								System.out.println("\n"+bkticket.bookTicket(source, destination, selectedBus, pssgn,
+										selectedSeatNo, dateOfTravel));
 							} catch (BookingFailedException e) {
 								System.out.println(e.getMessage());
 								System.out.println("Try again...");
 								continue label2;
-							} 
+							}
 						} else {
-							System.out.println("You canceled to book! \n");
+							System.out.println("you canceled to book");
 							continue label1;
 						}
 
 						System.out.println();
 						System.out.println("Do you want to book ticket again? \n Enter--> (Y->yes/N->No)");
-						char choice3 = input.next().charAt(0);//############################################
+						char choice3 = input.next().charAt(0);
 						if (choice3 == 'Y') {
 							continue label2;
 						} else {
 							System.out.println("Do you want to goto home page or logout enter your choice ");
 							System.out.println("1. Home page \n2. Logout");
 							int choice4;
-							
+
 							label3: while (true) {
 								try {
 									choice = input.nextInt();
@@ -240,7 +247,7 @@ public class App {
 									continue;
 								}
 							}
-							
+
 							if (choice == 1) {
 								continue label1;
 							} else {
@@ -250,15 +257,13 @@ public class App {
 						}
 					}
 				}
-				//############################################ do not forget to close all resurces
+				
 				break;
 
-				
 			case 2:
 				System.out.println("===========================================================================");
 				System.out.println("Enter your Full Name:");
-				input.nextLine(); // This line you have to add (It consumes the \n character which was not read by
-									// nextInt() earlier)
+				input.nextLine(); 
 				String userFullName = input.nextLine();
 				System.out.println("Enter username you want:");
 				String userName = input.next();
@@ -272,7 +277,6 @@ public class App {
 				}
 				System.out.println("Enter Your Mobile Number");
 				long phoneNumber = input.nextLong();
-				//############################################## create exception to validate phone number
 				System.out.println("Set your password:");
 				String userPassword = input.next();
 				User newUser = new User(userFullName, userName, userPassword, gender, age, phoneNumber);
@@ -289,51 +293,13 @@ public class App {
 				} catch (UserNameExistsException | PhoneNumberExistsException e) {
 					System.out.println(e.getMessage());
 				}
-				
-			
 
 				break;
 
-				
 			case 3:
 				// admin login and services that admin can do
-				Admin admin;
-				
-				String word = "";
-				AdminLogin adminLogin = new AdminLoginImpl();
-				while (true) {
-					System.out.println("===========================================================================");
-					System.out.println("Enter your Admin login Username " + word + ":");
-					String adminName = input.next();
-					try {
-						admin = adminLogin.validateadminUserName(adminName);
-						nextLoopflag = true;
-						System.out.println("Enter the  Admin password: ");
-						break;
-					} catch (UserNotFoundException e) {
-						System.out.println(e.getMessage());
-						nextLoopflag = false;
-						word = "again";
-						continue;
-					}
-				}
-				while (nextLoopflag) {
-					String adminPassword = input.next();
-					boolean result;
-					try {
-						result = adminLogin.passwordVerification(admin, adminPassword);
-						nextLoopflag = false;
-						break;
-					} catch (InvalidUserPasswordException e) {
-						System.out.println(e.getMessage());
-						System.out.println("Enter the password again: ");
-						continue;
-					}
-
-				}
 				break;
 
-			
 			case 0:
 				// this to exit from application
 				flag = false;
@@ -344,15 +310,6 @@ public class App {
 		} while (flag);
 	}
 
-	static String findDayOnThisDate(String date) throws ParseException {
-		SimpleDateFormat SDFormat = new SimpleDateFormat("dd/MM/yyyy");
-		Date userDt;
-		String str = null;
-		userDt = SDFormat.parse(date);
-		SimpleDateFormat sdf = new SimpleDateFormat("E");
-		str = sdf.format(userDt);
 
-		return str;
-	}
 
 }
