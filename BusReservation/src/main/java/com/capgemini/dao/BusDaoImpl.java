@@ -1,4 +1,4 @@
-package com.capgemini.dao;
+ package com.capgemini.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,108 +9,32 @@ import com.capgemini.exception.BusNotAvailableException;
 import com.capgemini.model.Bus;
 
 public class BusDaoImpl implements BusDao {
-//	private HashMap<K, V>
+	//	private HashMap<K, V>
 	//hashmap based on weeks
 	//key Day of week(eg. mon) and value is buslist
 	private static HashMap<String, List<Bus>> busListAccToTimeTable = new HashMap<String, List<Bus>>();	
 
-	private static List<Bus> monBusList = new ArrayList<Bus>();
-	private static List<Bus> tueBusList = new ArrayList<Bus>();
-	private static List<Bus> wedBusList = new ArrayList<Bus>();
-	private static List<Bus> thuBusList = new ArrayList<Bus>();
-	private static List<Bus> friBusList = new ArrayList<Bus>();
-	private static List<Bus> satBusList = new ArrayList<Bus>();
-	private static List<Bus> sunBusList = new ArrayList<Bus>();
-
 	static {
-		//for monday
-		String boardingStops1[] = { "Mumbai", "Panvel", "Lonavala" };
-		String dropingStops1[] = { "Panvel", "Lonavala", "Pune" };
-		Bus mumToPune = new Bus("Mumbai-Pune", "MH04NX1356", "Mumbai", "Pune", boardingStops1, dropingStops1, 20,"Dan Bravo","11:30 AM");
-
-		String boardingStops2[] = { "Panvel", "Lonavala", "Pune" };
-		String dropingStops2[] = { "Lonavala", "Pune", "Satara" };
-		Bus panvelToSatara = new Bus("Panvel-Satara", "MH05NX1487", "Panvel", "Satara", boardingStops2, dropingStops2, 20, "Bhuvan Signh","1:30 PM");
-
-		monBusList.add(mumToPune);
-		monBusList.add(panvelToSatara);		
-		busListAccToTimeTable.put("Mon", monBusList);
-		
-		
-		//for tuesday
-		String boardingStops3[] = { "Panvel", "Lonavala" };
-		String dropingStops3[] = {  "Lonavala", "Pune" };
-		Bus panvelToPune = new Bus("Panvel-Pune", "MH05TX1156", "Panvel", "Pune", boardingStops3, dropingStops3, 20,"Kylo ren","1:00 PM");
-
-		String boardingStops4[] = { "Panvel", "Lonavala", "Pune", "Satara" };
-		String dropingStops4[] = { "Lonavala", "Pune", "Satara", "Kolhapur"};
-		Bus panvelToKolhapur = new Bus("Panvel-Kolhapur", "MH0aNX5662", "Panvel", "Kolhapur", boardingStops4, dropingStops4, 20, "Han Solo","3:30 PM");
-
-		tueBusList.add(panvelToPune);
-		tueBusList.add(panvelToKolhapur);		
-		busListAccToTimeTable.put("Tue", tueBusList);
-		
-		//for Wednesday
-		mumToPune = new Bus("Mumbai-Pune", "MH04NX1356", "Mumbai", "Pune", boardingStops1, dropingStops1, 20,"Dan Bravo","11:30 AM");
-		panvelToSatara = new Bus("Panvel-Satara", "MH05NX1487", "Panvel", "Satara", boardingStops2, dropingStops2, 20, "Bhuvan Signh","1:30 PM");
-
-		wedBusList.add(mumToPune);
-		wedBusList.add(panvelToSatara);		
-		busListAccToTimeTable.put("Wed", wedBusList);
-		
-		//for Thursday
-		panvelToPune = new Bus("Panvel-Pune", "MH05TX1156", "Panvel", "Pune", boardingStops3, dropingStops3, 20,"Kylo ren","1:00 PM");
-		panvelToKolhapur = new Bus("Panvel-Kolhapur", "MH0aNX5662", "Panvel", "Kolhapur", boardingStops4, dropingStops4, 20, "Han Solo","3:30 PM");
-
-		thuBusList.add(panvelToPune);
-		thuBusList.add(panvelToKolhapur);		
-		busListAccToTimeTable.put("Thu", thuBusList);
-		
-		//for Friday
-		mumToPune = new Bus("Mumbai-Pune", "MH04NX1356", "Mumbai", "Pune", boardingStops1, dropingStops1, 20,"Dan Bravo","11:30 AM");
-		panvelToSatara = new Bus("Panvel-Satara", "MH05NX1487", "Panvel", "Satara", boardingStops2, dropingStops2, 20, "Bhuvan Signh","1:30 PM");
-
-		friBusList.add(mumToPune);
-		friBusList.add(panvelToSatara);		
-		busListAccToTimeTable.put("Fri", friBusList);
-		
-		//for Saturday
-		panvelToPune = new Bus("Panvel-Pune", "MH05TX1156", "Panvel", "Pune", boardingStops3, dropingStops3, 20,"Kylo ren","1:00 PM");
-		panvelToKolhapur = new Bus("Panvel-Kolhapur", "MH0aNX5662", "Panvel", "Kolhapur", boardingStops4, dropingStops4, 20, "Han Solo","3:30 PM");
-
-		satBusList.add(panvelToPune);
-		satBusList.add(panvelToKolhapur);		
-		busListAccToTimeTable.put("Sat", satBusList);
-		
-		//for Sunday
-		mumToPune = new Bus("Mumbai-Pune", "MH04NX1356", "Mumbai", "Pune", boardingStops1, dropingStops1, 20,"Dan Bravo","11:30 AM");
-		panvelToSatara = new Bus("Panvel-Satara", "MH05NX1487", "Panvel", "Satara", boardingStops2, dropingStops2, 20, "Bhuvan Signh","1:30 PM");
-
-		sunBusList.add(mumToPune);
-		sunBusList.add(panvelToSatara);		
-		busListAccToTimeTable.put("Sun", sunBusList);
-		
-		
-
+		busListAccToTimeTable = BusListTTDao.BusDatabase();	
 	}
 	
 	
 	@Override
-	public boolean createBus(Bus bus,String day) {		
+	public boolean createBus(Bus bus,String date) {		
 		List<Bus> busList = new ArrayList<Bus>();
-		busList = busListAccToTimeTable.get(day);
+		busList = busListAccToTimeTable.get(date);
 		//here validate busDeails method  to check whether already present or not
 		busList.add(bus);
-		busListAccToTimeTable.put(day, busList);
+		busListAccToTimeTable.put(date, busList);
 		return true;
 	}
 	
 
 	@Override
-	public List<Bus> findBus(String source, String destination, String day) throws BusNotAvailableException {
+	public List<Bus> findBus(String source, String destination, String date) throws BusNotAvailableException {
 		List<Bus> busList = new ArrayList<Bus>();
 		List<Bus> sortedBusList = new ArrayList<Bus>();
-		busList = busListAccToTimeTable.get(day);
+		busList = busListAccToTimeTable.get(date);
 		Bus bus = null;
 		String boardstop[] ;
 		String dropstop[] ;
@@ -159,6 +83,7 @@ public class BusDaoImpl implements BusDao {
 		return sortedBusList;
 	}
 
+	
 
 
 }
