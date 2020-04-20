@@ -12,9 +12,10 @@ public class Bus {
 	private String seatArrangement[];
 	private String conductorName;
 	private String departTime;
+	private String dateOfDept;
 
 	public Bus(String busName, String busNumber, String startStop, String endStop, String[] boardingStops,
-			String[] droppingStops, int numberOfSeats, String conductorName, String deparTtime) {
+			String[] droppingStops, int numberOfSeats, String conductorName, String deparTtime,String dateOfDept) {
 		this.busName = busName;
 		this.busNumber = busNumber;
 		this.startStop = startStop;
@@ -26,6 +27,7 @@ public class Bus {
 		this.conductorName = conductorName;
 		seatArrangement[1] ="Conductor-"+conductorName;
 		this.departTime =deparTtime;
+		this.dateOfDept = dateOfDept;
 			
 	}
 
@@ -108,6 +110,14 @@ public class Bus {
 
 	public void setDepartTime(String departTime) {
 		this.departTime = departTime;
+	}
+
+	public String getDateOfDept() {
+		return dateOfDept;
+	}
+
+	public void setDateOfDept(String dateOfDept) {
+		this.dateOfDept = dateOfDept;
 	}
 		
 }
