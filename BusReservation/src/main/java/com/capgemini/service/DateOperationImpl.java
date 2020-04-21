@@ -19,15 +19,16 @@ public class DateOperationImpl implements DateOperation{
 		Date currdt = cal.getTime();
 	
 		
-		cal.add(Calendar.DAY_OF_MONTH, 15);
+		cal.add(Calendar.DAY_OF_MONTH, 14);
 		Date offsetDt = cal.getTime();
+//		System.out.println("offdate:"+SDFormat.format(offsetDt)); 
 		
 		Date userDt;
 		userDt = SDFormat.parse(date);
 		String userDate = SDFormat.format(userDt);
 
 		if(userDt.after(offsetDt)) {
-			throw new UserDateExceedLimitException(date);
+			throw new UserDateExceedLimitException(offsetDate());
 		}else if (userDt.equals(currdt)) {
 			throw new UserDateEqualCurrDateException();
 		}else if (userDt.before(currdt)) {
@@ -44,7 +45,7 @@ public class DateOperationImpl implements DateOperation{
 		Calendar cal = Calendar.getInstance();
 		Date currdt = cal.getTime();
 		
-		cal.add(Calendar.DAY_OF_MONTH, 15);
+		cal.add(Calendar.DAY_OF_MONTH, 14);
 		Date offsetDt = cal.getTime();
 		String offsetDate = SDFormat.format(offsetDt);
 		return offsetDate;
