@@ -16,11 +16,12 @@ public class DateOperationImpl implements DateOperation{
 
 		SimpleDateFormat SDFormat = new SimpleDateFormat("dd/MM/yyyy");
 		Calendar cal = Calendar.getInstance();
-		Date currdt = cal.getTime();
-	
+		Date currdt = cal.getTime();//today's date
+		String crrdt1 = SDFormat.format(currdt);
+		
 		
 		cal.add(Calendar.DAY_OF_MONTH, 14);
-		Date offsetDt = cal.getTime();
+		Date offsetDt = cal.getTime();//14 days later
 //		System.out.println("offdate:"+SDFormat.format(offsetDt)); 
 		
 		Date userDt;
@@ -29,7 +30,7 @@ public class DateOperationImpl implements DateOperation{
 
 		if(userDt.after(offsetDt)) {
 			throw new UserDateExceedLimitException(offsetDate());
-		}else if (userDt.equals(currdt)) {
+		}else if (crrdt1.equals(userDate)) {
 			throw new UserDateEqualCurrDateException();
 		}else if (userDt.before(currdt)) {
 			throw new UserDateFallBehindCurrDateException(date); 
