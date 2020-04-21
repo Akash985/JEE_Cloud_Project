@@ -23,6 +23,7 @@ public class UserLoginImplTest {
 	
 	@After
 	public void teardown() {
+		userLogin = null;
 		user1 = null;
 	}
 	
