@@ -114,6 +114,24 @@ public class BusListTTDao {
 			
 		}	
 		
+		//this one is for test case
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+		busList = new ArrayList<Bus>();
+		offsetDt = cal.getTime();
+		offsetDate = SDFormat.format(offsetDt);//returns date in string -->dd/mm/yyyy
+		offsetDateDay = sdf.format(offsetDt);//returns day on that day in string format			
+		Bus testBus;
+		String bdStops[] = { "st1", "st2", "st3" };
+		String dpStops[] = { "st2", "st3", "st4" };
+		//String offsetDate = "26/01/2020";// this date is just for test case
+		testBus = new Bus("st1-st4", "AB00NX1234", "st1", "st4", bdStops, dpStops, 20, "XYZ",
+				"11:30 AM", offsetDate);
+		busList.add(testBus);	
+		testBus = new Bus("st1-st4", "DC00NX1234", "st1", "st4", bdStops, dpStops, 20, "ABC",
+				"11:30 AM", offsetDate);//used in test case for removing
+		busList.add(testBus);	
+		busListAccToTimeTable.put(offsetDate, busList);	
+		//above one is for test case
 		
 		return busListAccToTimeTable;
 	}

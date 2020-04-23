@@ -20,15 +20,17 @@ public class TicketDaoImpl implements TicketDao {
 	@Override
 	public boolean removeTicketFromDatabase(String ticketSrNo) {
 		////@ARUN-ST
+		//use iterator for this
+		//whenever you remove ticket from ticket list also remove  related passenger from passenger lst
 		//@ARUN-CL
 		return false;
 	}
 	
 	/*
-	 * add ticket--->boolean storeTicketInDatabase(Ticket ticket);
-	 * delete ticket
-	 * update ticket information(functions like -->updateTicketDetailsBy
-	 * PassengerName or updateTicketDetailsBySrNo)
+	 * add ticket--->boolean storeTicketInDatabase(Ticket ticket);-->Done
+	 * delete ticket -->Done
+	 * update ticket information(functions like -->updateTicketDetailsByxxxxxxx-->dont implement this
+	 * PassengerName or updateTicketDetailsBySrNo)xxxxxxxxx dont implement this
 	 * 
 	 * */
 	

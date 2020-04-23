@@ -16,12 +16,7 @@ public class PassengerDaoImpl implements PassengerDao{
 
 	@Override
 	public boolean deletePassenger(Passenger pssgn, Long ticketNo) {
-		// TODO Auto-generated method stub
-		passengerList.remove(ticketNo, pssgn);
-		return true;
-	}
-	
-	
-	//update Passenger information
+		return passengerList.remove(ticketNo, pssgn);
+	}	
 
 }

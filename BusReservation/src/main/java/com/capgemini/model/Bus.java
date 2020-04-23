@@ -14,6 +14,8 @@ public class Bus {
 	private String departTime;
 	private String dateOfDept;
 
+	
+	
 	public Bus(String busName, String busNumber, String startStop, String endStop, String[] boardingStops,
 			String[] droppingStops, int numberOfSeats, String conductorName, String deparTtime,String dateOfDept) {
 		this.busName = busName;
@@ -120,4 +122,22 @@ public class Bus {
 		this.dateOfDept = dateOfDept;
 	}
 		
+	@Override
+	public boolean equals(Object obj) {
+		if(this ==obj)
+			return true;
+		if(obj == null && this==null)
+			return false;
+
+		Bus other = (Bus)obj;
+		if(!this.getBusName().equals(other.getBusName()))
+			return false;
+		if(!this.getBusNumber().equals(other.getBusNumber()))
+			return false;
+		if(!this.getDateOfDept().equals(other.getDateOfDept()))
+			return false;
+		if(!this.getDepartTime().equals(other.getDepartTime()))
+			return false;
+		return true;
+	}
 }
