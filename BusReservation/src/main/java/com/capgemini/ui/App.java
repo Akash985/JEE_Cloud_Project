@@ -58,12 +58,14 @@ public class App {
 					choice = input.nextInt();
 					if (choice <= 0 || choice > 3) {
 						System.out.println("!!!You have to choose a choice from 0 to 3");
+						System.out.println("Enter your choice again: ");
 						continue;
 					} else {
 						break;
 					}
 				} catch (InputMismatchException e) {
-					System.out.println("Invalid input! You have to enter a choice");
+					System.out.println("Invalid input! You have to enter a choice in number try again");
+					System.out.println("Enter your choice again: ");
 					input.next();
 					continue;
 				}
@@ -124,18 +126,20 @@ public class App {
 				label1: while (true) {
 					System.out.println("Enter your Source");
 					source = input.next();
-					System.out.println("Enter your destination");
+					System.out.println("Enter your Destination");
 					destination = input.next();
 					while (true) {
-						System.out.println("Enter the date of travel in dd/m//yyyy");
+						System.out.println("Enter the date of travel in dd/mm//yyyy");
 						dateOfTravel = input.next();
 						try {
 							dateOfTravel = dtoperation.validateDate(dateOfTravel);
 							break;
-						} catch (ParseException | UserDateExceedLimitException
-								| UserDateFallBehindCurrDateException | UserDateEqualCurrDateException e) {
+						} catch ( UserDateExceedLimitException | UserDateFallBehindCurrDateException
+								| UserDateEqualCurrDateException e) {
 							System.out.println(e.getMessage());
 							continue;
+						} catch (ParseException e) {
+							System.out.println("You have entered invalid Date input!!!");
 						}
 
 					}
@@ -144,10 +148,10 @@ public class App {
 					try {
 						availBusList = searchBus.showAvailableBuses(source, destination, dateOfTravel);
 					} catch (SourceAndDestinationAreEqualException e) {
-						System.out.println(e.getMessage());
+						System.out.println(e.getMessage()+"\n");
 						continue label1;
 					} catch (BusNotAvailableException e) {
-						System.out.println(e.getMessage());
+						System.out.println(e.getMessage()+"\n");
 						continue label1;
 					}
 
@@ -156,10 +160,24 @@ public class App {
 						System.out.println((i + 1) + ". " + availBusList.get(i).getBusName() + " - "
 								+ availBusList.get(i).getDepartTime());
 					}
+					
 					// here user selects the bus
 					System.out.println("Select the choice in which you want to travel from above list");
-					int busChoice = input.nextInt(); // ##here exception
-					selectedBus = availBusList.get(busChoice - 1);
+					int busChoice ;
+					while(true) { 
+						try {
+							busChoice = input.nextInt(); 
+							selectedBus = availBusList.get(busChoice - 1);
+							break;
+						}catch (IndexOutOfBoundsException e) {
+							System.out.println("select choice from 1 to "+availBusList.size()+" !!!");
+							continue;
+						}catch(InputMismatchException e) {
+							System.out.println("Invalid input! You have to enter a choice in number try again");
+							input.nextLine();
+							continue;
+						}
+					}
 
 					// show seat availability in that bus
 					label2: while (true) {
@@ -175,41 +193,67 @@ public class App {
 
 						// here user selects the seatNo
 						System.out.println("Enter the seat you want :");
-						int selectedSeatNo = input.nextInt();
+						int selectedSeatNo;
 
+						
 						// validateSeatNo of that bus
 						SeatArrangement seatArrgn = new SeatArrangementImpl();
 						try {
+							selectedSeatNo = input.nextInt();
 							seatArrgn.validateSeat(selectedBus, selectedSeatNo);
-						} catch (SeatAlreadyOccupiedException e) {
+						}catch(InputMismatchException e) {
+							System.out.println("\nInvalid input! You have to enter a choice in number try again");
+							input.next();
+							System.out.println("Enter seats from below available seats");
+							continue label2;
+						}catch (SeatAlreadyOccupiedException e) {
 							System.out.println();
 							System.out.println(e.getMessage());
+							System.out.println("Enter seats from below available seats");
+							continue label2;
+						}catch(ArrayIndexOutOfBoundsException e) {
+							System.out.println("\nYou have entered choice which exceeds the seat limit in Bus(i.e greater than "+e.getMessage()+") !!!");
 							System.out.println("Enter seats from below available seats");
 							continue label2;
 						}
 
 						// ask to enter passenger details
+						System.out.println();
 						System.out.println("Enter the passenger details :");
 						System.out.println("Enter the passenger full name : ");
 						input.nextLine();
 						String pssgnName = input.nextLine();
 						System.out.println("Enter passenger gender :");
 						gender = input.next().charAt(0);
+						while (gender != 'M' && gender != 'F') {
+							System.out.println("!!!Enter either \"M\"->for male or \"F\"->for Female!!!");
+							gender = input.next().charAt(0);
+						}
 						System.out.println("Enter passenger Age :");
-						age = input.nextInt();
+						while (true) {
+							try {
+								age = input.nextInt();
+								break;
+							} catch (InputMismatchException e) {
+								System.out.println("Invalid input! You have to enter a age in number try again");
+								input.next();
+								continue;
+							}
+						}
 
 						Passenger pssgn = new Passenger(pssgnName, gender, age);
 
+						System.out.println("===========================================================================");
 						System.out.println("Your ticket details are:");
 						BookTicket bkticket = new BookTicketImpl();
-						System.out.println("\n"+bkticket.showTicket(source, destination, selectedBus, pssgn, selectedSeatNo,
-								dateOfTravel));
+						System.out.println("\n" + bkticket.showTicket(source, destination, selectedBus, pssgn,
+								selectedSeatNo, dateOfTravel));
 
 						System.out.println("Do you want to confirm ticket (Y->yes/N->No)");
 						char choice2 = input.next().charAt(0);
-						if (choice2 == 'Y') {
+						if (choice2 == 'Y' || choice2 == 'y') {
 							try {
-								System.out.println("\n"+bkticket.bookTicket(source, destination, selectedBus, pssgn,
+								System.out.println("\n" + bkticket.bookTicket(source, destination, selectedBus, pssgn,
 										selectedSeatNo, dateOfTravel));
 							} catch (BookingFailedException e) {
 								System.out.println(e.getMessage());
@@ -222,9 +266,9 @@ public class App {
 						}
 
 						System.out.println();
-						System.out.println("Do you want to book ticket again? \n Enter--> (Y->yes/N->No)");
+						System.out.println("Do you want to book ticket again in same Bus on same date? \nEnter--> (Y->yes/N->No)");
 						char choice3 = input.next().charAt(0);
-						if (choice3 == 'Y') {
+						if (choice3 == 'Y' || choice3 == 'y') {
 							continue label2;
 						} else {
 							System.out.println("Do you want to goto home page or logout enter your choice ");
@@ -257,18 +301,32 @@ public class App {
 						}
 					}
 				}
-				
+
 				break;
 
 			case 2:
+				
 				System.out.println("===========================================================================");
 				System.out.println("Enter your Full Name:");
-				input.nextLine(); 
+				input.nextLine();
 				String userFullName = input.nextLine();
 				System.out.println("Enter username you want:");
 				String userName = input.next();
 				System.out.println("Enter your age:");
-				age = input.nextInt();
+				while (true) {
+					try {
+						age = input.nextInt();
+						break;
+					} catch (InputMismatchException e) {
+						System.out.println("Invalid input! You have to enter a age in number try again");
+						input.next();
+						continue;
+					}
+				}
+				if (age <= 16 || age >=60) {
+					System.out.println("!!!You are not eligible for registration");
+					break;				
+				}				
 				System.out.println("Enter your Gender M/F:");
 				gender = input.next().charAt(0);
 				while (gender != 'M' && gender != 'F') {
@@ -309,7 +367,5 @@ public class App {
 
 		} while (flag);
 	}
-
-
 
 }
