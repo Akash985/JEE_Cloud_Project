@@ -18,9 +18,12 @@ import com.capgemini.exception.UserDateExceedLimitException;
 import com.capgemini.exception.UserDateFallBehindCurrDateException;
 import com.capgemini.exception.UserNameExistsException;
 import com.capgemini.exception.UserNotFoundException;
+import com.capgemini.model.Admin;
 import com.capgemini.model.Bus;
 import com.capgemini.model.Passenger;
 import com.capgemini.model.User;
+import com.capgemini.service.AdminLogin;
+import com.capgemini.service.AdminLoginImpl;
 import com.capgemini.service.BookTicket;
 import com.capgemini.service.BookTicketImpl;
 import com.capgemini.service.DateOperation;
@@ -356,6 +359,40 @@ public class App {
 
 			case 3:
 				// admin login and services that admin can do
+				Admin admin;
+
+				String word = "";
+				AdminLogin adminLogin = new AdminLoginImpl();
+				while (true) {
+					System.out.println("===========================================================================");
+					System.out.println("Enter your Admin login Username " + word + ":");
+					String adminName = input.next();
+					try {
+						admin = adminLogin.validateadminUserName(adminName);
+						nextLoopflag = true;
+						System.out.println("Enter the  Admin password: ");
+						break;
+					} catch (UserNotFoundException e) {
+						System.out.println(e.getMessage());
+						nextLoopflag = false;
+						word = "again";
+						continue;
+					}
+				}
+				while (nextLoopflag) {
+					String adminPassword = input.next();
+					boolean result;
+					try {
+						result = adminLogin.passwordVerification(admin, adminPassword);
+						nextLoopflag = false;
+						break;
+					} catch (InvalidUserPasswordException e) {
+						System.out.println(e.getMessage());
+						System.out.println("Enter the password again: ");
+						continue;
+					}
+
+				}
 				break;
 
 			case 0:
